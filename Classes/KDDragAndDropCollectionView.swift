@@ -24,6 +24,10 @@
 
 import UIKit
 
+public protocol KDDragAndDropCollectionVieDelegate{
+    func collectionViewStartDraggin(_ collectionView: UICollectionView) -> Void
+    func collectionViewStopDraggin(_ collectionView: UICollectionView) -> Void
+}
 public protocol KDDragAndDropCollectionViewDataSource : UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, indexPathForDataItem dataItem: AnyObject) -> IndexPath?
@@ -51,7 +55,7 @@ extension KDDragAndDropCollectionViewDataSource {
     }
 }
 
-open class KDDragAndDropCollectionView: UICollectionView, KDDraggable, KDDroppable {
+public class KDDragAndDropCollectionView: UICollectionView, KDDraggable, KDDroppable {
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -61,6 +65,8 @@ open class KDDragAndDropCollectionView: UICollectionView, KDDraggable, KDDroppab
     
     var iDataSource : UICollectionViewDataSource?
     var iDelegate : UICollectionViewDelegate?
+    public var moveDelegate : KDDragAndDropCollectionVieDelegate?
+    
     
     override open func awakeFromNib() {
         super.awakeFromNib()
@@ -128,6 +134,14 @@ open class KDDragAndDropCollectionView: UICollectionView, KDDraggable, KDDroppab
     public func startDraggingAtPoint(_ point : CGPoint) -> Void {
         
         self.draggingPathOfCellBeingDragged = self.indexPathForItem(at: point)
+        
+        if let delegate = self.moveDelegate
+        {
+            
+            delegate.collectionViewStartDraggin(self)
+            
+        }
+        
         
         self.reloadData()
         
