@@ -37,7 +37,11 @@ public protocol KDDraggable {
 
 extension KDDraggable {
     public func startDraggingAtPoint(_ point : CGPoint) -> Void {}
-    public func stopDragging() -> Void {}
+    public func stopDragging() -> Void {
+        
+        
+        print("dd")
+    }
 }
 
 

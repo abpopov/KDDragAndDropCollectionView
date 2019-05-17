@@ -24,7 +24,7 @@
 
 import UIKit
 
-public protocol KDDragAndDropCollectionVieDelegate{
+public protocol KDDragAndDropCollectionViewDelegate{
     func collectionViewStartDraggin(_ collectionView: UICollectionView) -> Void
     func collectionViewStopDraggin(_ collectionView: UICollectionView) -> Void
 }
@@ -65,7 +65,7 @@ public class KDDragAndDropCollectionView: UICollectionView, KDDraggable, KDDropp
     
     var iDataSource : UICollectionViewDataSource?
     var iDelegate : UICollectionViewDelegate?
-    public var moveDelegate : KDDragAndDropCollectionVieDelegate?
+    public var moveDelegate : KDDragAndDropCollectionViewDelegate?
     
     
     override open func awakeFromNib() {
@@ -147,7 +147,7 @@ public class KDDragAndDropCollectionView: UICollectionView, KDDraggable, KDDropp
         
     }
     
-    public func stopDragging() -> Void {
+     public func stopDragging() -> Void {
         
         if let idx = self.draggingPathOfCellBeingDragged {
             if let cell = self.cellForItem(at: idx) {
@@ -156,6 +156,14 @@ public class KDDragAndDropCollectionView: UICollectionView, KDDraggable, KDDropp
         }
         
         self.draggingPathOfCellBeingDragged = nil
+        
+        
+        if let delegate = self.moveDelegate
+        {
+            
+            delegate.collectionViewStopDraggin(self)
+            
+        }
         
         self.reloadData()
         
