@@ -27,7 +27,7 @@ import UIKit
 public protocol KDDraggable {
     func canDragAtPoint(_ point : CGPoint) -> Bool
     func representationImageAtPoint(_ point : CGPoint) -> UIView?
-    func stylingRepresentationView(_ view: UIView) -> UIView?
+    func stylingRepresentationView(_ view: UIView,forItem: AnyObject?, atPoint:CGPoint) -> UIView?
     func dataItemAtPoint(_ point : CGPoint) -> AnyObject?
     func dragDataItem(_ item : AnyObject) -> Void
     
@@ -99,7 +99,10 @@ public class KDDragAndDropManager: NSObject, UIGestureRecognizerDelegate {
             
             representation.frame = self.canvas.convert(representation.frame, from: view)
             representation.alpha = 0.5
-            if let decoredView = draggable.stylingRepresentationView(representation) {
+            
+            let dragItem: AnyObject? = draggable.dataItemAtPoint(touchPointInView)
+            
+            if let decoredView = draggable.stylingRepresentationView(representation,forItem: dragItem, atPoint:touch.location(in: touch.window) ) {
                 representation = decoredView
             }
             
